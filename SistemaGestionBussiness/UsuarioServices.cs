@@ -1,16 +1,18 @@
 ﻿using SistemaGestionEntities;
 using SistemaGestionBussiness.Helper;
-using SistemaGestionUI;
+using System;
+using System.Collections.Generic;
+using SistemaGestionData;
 
 namespace SistemaGestionBussiness
 {
-    public class UsuarioServices
+    public class UsuarioServices : IUsuarioServices
     {
         private readonly IUsuarioRepository _usuarioRepository;
 
         public UsuarioServices(IUsuarioRepository usuarioRepository)
         {
-            _usuarioRepository = usuarioRepository ?? throw new ArgumentNullException(nameof(usuarioRepository));
+            _usuarioRepository = usuarioRepository;
         }
 
         public void AgregarUsuario(Usuario usuario)
@@ -34,6 +36,8 @@ namespace SistemaGestionBussiness
             var hashedPassword = HashingHelper.HashPassword(usuario.Password, salt);
 
             usuario.Password = hashedPassword;
+            usuario.Salt = salt;
+
             _usuarioRepository.AgregarUsuario(usuario);
         }
 
@@ -42,7 +46,7 @@ namespace SistemaGestionBussiness
             var usuario = _usuarioRepository.ObtenerUsuarioPorNombreUsuario(nombreUsuario);
             if (usuario != null)
             {
-                var hashedPassword = HashingHelper.HashPassword(passwordPlainText /* salt asociado al usuario */);
+                var hashedPassword = HashingHelper.HashPassword(passwordPlainText, usuario.Salt);
                 return hashedPassword == usuario.Password;
             }
             return false;
@@ -58,9 +62,9 @@ namespace SistemaGestionBussiness
             return _usuarioRepository.ObtenerUsuarioPorId(usuarioId);
         }
 
-        public List<Usuario> ObtenerTodosLosUsuarios()
+        public List<Usuario> GetUsuarios()
         {
-            return _usuarioRepository.ObtenerTodosLosUsuarios();
+            return _usuarioRepository.GetUsuarios();
         }
 
         public void ActualizarUsuario(Usuario usuarioActualizado)
@@ -89,9 +93,10 @@ namespace SistemaGestionBussiness
 
             if (usuarioActualizado.Password != usuarioEnBD.Password)
             {
-                var salt = HashingHelper.GenerateSalt(); /* Obtiene el salt del usuario si lo tienes guardado, o genera uno nuevo */
-                var hashedPassword = HashingHelper.HashPassword(usuarioActualizado.Password, salt);
+                var newSalt = HashingHelper.GenerateSalt();
+                var hashedPassword = HashingHelper.HashPassword(usuarioActualizado.Password, newSalt);
                 usuarioEnBD.Password = hashedPassword;
+                usuarioEnBD.Salt = newSalt;
             }
 
             _usuarioRepository.ActualizarUsuario(usuarioEnBD);
@@ -118,4 +123,3 @@ namespace SistemaGestionBussiness
         }
     }
 }
-

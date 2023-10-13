@@ -1,5 +1,10 @@
 using SistemaGestionBussiness;
 using SistemaGestionData;
+using Autofac;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace SistemaGestionUI
 {
@@ -16,15 +21,9 @@ namespace SistemaGestionUI
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
 
-            var builder = new ContainerBuilder();
-
-            // Registra las implementaciones concretas.
-            builder.RegisterType<UsuarioRepository>().As<IUsuarioRepository>();
-            builder.RegisterType<UsuarioServices>();
-
-            // Crea el contenedor.
-            var container = builder.Build();
+         
 
         }
+     
     }
 }

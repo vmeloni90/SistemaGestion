@@ -9,8 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SistemaGestionBussiness\SistemaGestionBussiness.csproj" />
-    <ProjectReference Include="..\SistemaGestionEntities\SistemaGestionEntities.csproj" />
+    <PackageReference Include="Autofac" Version="7.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaGestionWebAPI\SistemaGestionWebAPI.csproj" />
   </ItemGroup>
 
 </Project>

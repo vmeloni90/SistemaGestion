@@ -9,12 +9,12 @@ namespace SistemaGestionBussiness.Helper
 {
     public class HashingHelper
     {
-        private string HashPassword(string password, string salt)
+        public static string HashPassword(string password, string salt)
         {
             var pbkdf2 = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
             return Convert.ToBase64String(pbkdf2.GetBytes(32)); // Retorna un hash de 256 bits.
         }
-        private string GenerateSalt() //asegura que dos usuarios con la misma contraseña no tendran el mismo hash
+        public static string GenerateSalt() //asegura que dos usuarios con la misma contraseña no tendran el mismo hash
         {
             var rng = new RNGCryptoServiceProvider();
             var salt = new byte[16]; 

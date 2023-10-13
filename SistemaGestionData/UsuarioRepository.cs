@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using SistemaGestionEntities;
 using static SistemaGestionData.Contexto;
-
+using SistemaGestionBussiness;
 
 namespace SistemaGestionData
 {
-    public class UsuarioRepository
+    public class UsuarioRepository: IUsuarioRepository
     {
         private readonly Contexto context;
 
@@ -37,7 +37,7 @@ namespace SistemaGestionData
             return context.Usuarios.Find(usuarioId);
         }
 
-        public List<Usuario> ObtenerTodosLosUsuarios()
+        public List<Usuario> GetUsuarios()
         {
             return context.Usuarios.ToList();
         }
